@@ -1,0 +1,44 @@
+FROM public.ecr.aws/lambda/python:3.13
+
+# 필수 패키지 설치 (curl은 기본 제공 → 제외)
+RUN dnf install -y wget unzip
+
+# Chrome Stable 최신버전 (139.0.7258.138)
+ENV CHROME_VERSION=139.0.7258.138
+
+# Chrome 설치
+RUN wget -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip && \
+    unzip /tmp/chrome.zip -d /opt/ && \
+    rm -f /tmp/chrome.zip && \
+    ln -s /opt/chrome-linux64/chrome /usr/bin/google-chrome
+
+# ChromeDriver 설치
+RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip && \
+    unzip /tmp/chromedriver.zip -d /tmp/ && \
+    mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf /tmp/chromedriver.zip /tmp/chromedriver-linux64
+
+
+RUN dnf install -y \
+    atk \
+    at-spi2-atk \
+    gtk3 \
+    libdrm \
+    libX11 \
+    libXcomposite \
+    libXcursor \
+    libXdamage \
+    libXext \
+    libXi \
+    libXtst \
+    cups-libs \
+    pango \
+    alsa-lib \
+    libXrandr \
+    libXss \
+    libXxf86vm \
+    xorg-x11-server-Xvfb \
+    nss \
+    nspr \
+    dbus-glib

@@ -1,0 +1,28 @@
+# Python 캐시/컴파일 파일
+__pycache__/
+*.py[cod]
+
+# 가상환경
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# 빌드/배포 파일
+*.egg-info/
+dist/
+build/
+
+# 환경설정 (민감 정보)
+.env
+env.py
+env_*.py
+
+
+# 대용량 zip, binary 파일 무시
+*.zip
+chrome-linux/
+chromedriver_linux64/
+layer/

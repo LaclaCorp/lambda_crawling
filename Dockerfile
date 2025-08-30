@@ -1,0 +1,52 @@
+FROM public.ecr.aws/lambda/python:3.13
+
+ENV CHROME_VERSION=139.0.7258.138
+
+# 필수 패키지 설치
+RUN dnf install -y wget unzip \
+    atk \
+    at-spi2-atk \
+    gtk3 \
+    libdrm \
+    libX11 \
+    libXcomposite \
+    libXcursor \
+    libXdamage \
+    libXext \
+    libXi \
+    libXtst \
+    cups-libs \
+    pango \
+    alsa-lib \
+    libXrandr \
+    libXScrnSaver \
+    libXxf86vm \
+    xorg-x11-server-Xvfb \
+    nss \
+    nspr \
+    dbus-glib \
+    && dnf clean all && rm -rf /var/cache/dnf
+
+# Chrome 설치
+RUN wget -O /tmp/chrome.zip https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip && \
+    unzip /tmp/chrome.zip -d /opt/ && \
+    rm -f /tmp/chrome.zip && \
+    ln -s /opt/chrome-linux64/chrome /usr/bin/google-chrome
+
+# ChromeDriver 설치
+RUN wget -O /tmp/chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chromedriver-linux64.zip && \
+    unzip /tmp/chromedriver.zip -d /tmp/ && \
+    mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/ && \
+    chmod +x /usr/local/bin/chromedriver && \
+    rm -rf /tmp/chromedriver.zip /tmp/chromedriver-linux64
+
+# Python 패키지 설치
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 소스 복사
+COPY src/ /var/task/
+WORKDIR /var/task
+
+# Lambda Entrypoint (AWS Lambda 실행 방식과 동일)
+CMD ["lambda_function.lambda_handler"]

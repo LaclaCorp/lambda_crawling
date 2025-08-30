@@ -1,0 +1,25 @@
+# --- DB ---
+pymongo==4.0.2
+
+# --- HTML 파싱 ---
+beautifulsoup4==4.10.0
+soupsieve==2.3.2.post1
+lxml
+
+# --- HTTP 요청 ---
+requests==2.27.1
+urllib3==1.26.20
+certifi==2023.7.22
+chardet==3.0.4
+idna==3.10
+
+# --- Selenium ---
+selenium==4.9.1
+
+# --- 유틸 ---
+python-dateutil==2.7.5
+six==1.16.0
+future==0.18.3
+jsonpickle==2.0.0
+packaging==20.9
+zipp==3.6.0
